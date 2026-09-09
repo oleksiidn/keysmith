@@ -20,3 +20,8 @@ Some todo items include:
  - Backup and Restore of accounts
 
 Originally this code was based largely on the [authenticator-ng](https://github.com/dobey/authenticator-ng) application by Rodney Dawes and Michael Zanetti for Ubuntu Touch.
+
+
+## Original repository
+
+git remote add upstream https://invent.kde.org/utilities/keysmith.git

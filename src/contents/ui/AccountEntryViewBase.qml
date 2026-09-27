@@ -94,6 +94,25 @@ Kirigami.SwipeListItem {
         }
     }
 
+    readonly property Components.MessageDialog secretDialog: Components.MessageDialog {
+        property string secret: ""
+
+        dialogType: Components.MessageDialog.Warning
+        title: i18nc("Secret dialog title: %1 is the name of the account", "Secret of account: %1", account.name)
+        standardButtons: Controls.Dialog.Close
+        onRejected: {
+            secret = "";
+            secretDialog.close();
+        }
+
+        Controls.TextField {
+            Layout.fillWidth: true
+            readOnly: true
+            font.family: "monospace"
+            text: secretDialog.secret
+        }
+    }
+
     readonly property Components.MessageDialog sheet: Components.MessageDialog {
         dialogType: Components.MessageDialog.Warning
 

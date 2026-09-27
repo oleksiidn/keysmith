@@ -53,6 +53,7 @@ public:
     int tokenLength(void) const;
     QString hash(void) const;
     Q_INVOKABLE qint64 millisecondsLeftForToken(void) const;
+    Q_INVOKABLE QString secret(void) const;
 Q_SIGNALS:
     void tokenChanged(void);
     void remove(void);

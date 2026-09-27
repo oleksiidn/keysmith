@@ -34,6 +34,36 @@ QString AccountPrivate::issuer(void) const
     return m_issuer;
 }
 
+QString AccountPrivate::secret(void) const
+{
+    if (!m_is_still_alive || !m_storage->isStillOpen()) {
+        return QString();
+    }
+
+    QScopedPointer<secrets::SecureMemory> decrypted(m_storage->secret()->decrypt(m_secret));
+    if (!decrypted) {
+        qCDebug(logger) << "Unable to show secret for account:" << m_id << "Failed to decrypt account secret";
+        return QString();
+    }
+
+    static const char alphabet[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+    QString encoded;
+    quint32 buffer = 0;
+    int bits = 0;
+    for (size_t i = 0; i < decrypted->size(); ++i) {
+        buffer = (buffer << 8) | decrypted->constData()[i];
+        bits += 8;
+        while (bits >= 5) {
+            bits -= 5;
+            encoded.append(QLatin1Char(alphabet[(buffer >> bits) & 0x1F]));
+        }
+    }
+    if (bits > 0) {
+        encoded.append(QLatin1Char(alphabet[(buffer << (5 - bits)) & 0x1F]));
+    }
+    return encoded;
+}
+
 QString AccountPrivate::token(void) const
 {
     return m_token;

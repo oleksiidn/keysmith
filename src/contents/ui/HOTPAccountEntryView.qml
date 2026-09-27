@@ -15,6 +15,16 @@ AccountEntryViewBase {
 
     actions: [
         Kirigami.Action {
+            icon.name: "password-show-on"
+            text: i18nc("Button to reveal the secret of a single account", "Show secret")
+            enabled: listItem.alive
+            onTriggered: {
+                listItem.actionTriggered();
+                listItem.secretDialog.secret = listItem.account.secret();
+                listItem.secretDialog.open();
+            }
+        },
+        Kirigami.Action {
             icon.name: "documentinfo"
             text: i18nc("Button to show details of a single account", "Show details")
             enabled: listItem.alive

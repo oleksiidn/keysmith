@@ -1,0 +1,25 @@
+name: Flatpak
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+  workflow_dispatch:
+
+jobs:
+  flatpak:
+    name: Build Flatpak (aarch64)
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.11
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: flatpak/flatpak-github-actions/flatpak-builder@v6
+        with:
+          bundle: keysmith-aarch64.flatpak
+          manifest-path: .flatpak-manifest.json
+          arch: aarch64
+          cache-key: flatpak-builder-aarch64-${{ github.sha }}

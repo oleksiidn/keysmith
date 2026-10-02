@@ -38,5 +38,5 @@ The current goal is to show secrets as QR code.
 ----
 wget -O keysmith.zip https://nightly.link/oleksiidn/keysmith/workflows/flatpak.yml/dev/keysmith-aarch64-aarch64.flatpak.zip
 unzip -o keysmith.zip
-flatpak install --user ./keysmith-aarch64.flatpak
+flatpak install --user --reinstall ./keysmith-aarch64.flatpak
 ----

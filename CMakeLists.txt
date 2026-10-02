@@ -73,6 +73,15 @@ if(NOT BUILD_EXTERNAL)
     find_package(sodium ${SODIUM_MIN_VERSION} REQUIRED)
 endif()
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
+find_package(qrencode REQUIRED)
+set_package_properties(qrencode PROPERTIES
+        DESCRIPTION "QR code encoding library"
+        URL "https://github.com/fukuchi/libqrencode"
+        TYPE REQUIRED
+        PURPOSE "Exporting accounts as QR codes"
+)
+
 find_package(OpenSSL)
 set_package_properties(OpenSSL PROPERTIES
     TYPE REQUIRED

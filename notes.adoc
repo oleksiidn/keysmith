@@ -1,5 +1,11 @@
 = Notes
 
+== HOTPA vs TOTPA
+
+HOTP (RFC 4226) is counter-based. The token changes only when the counter goes up, usually because you asked for the next one.
+
+TOTP (RFC 6238) is time-based. The token changes by itself every N seconds, counted from a start time (the epoch).
+
 == How to compile
 
 === Ubuntu
@@ -10,7 +16,7 @@ sudo apt install cmake ninja-build g++ extra-cmake-modules \
 qt6-base-dev qt6-declarative-dev qt6-svg-dev \
 libkirigami-dev libkf6coreaddons-dev libkf6i18n-dev libkf6config-dev \
 libkf6dbusaddons-dev libkf6windowsystem-dev libkf6qqc2desktopstyle-dev \
-kirigami-addons-dev libkf6prison-dev libsodium-dev libssl-dev \
+kirigami-addons-dev libkf6prison-dev libsodium-dev libssl-dev libqrencode-dev pkg-config \
 qml6-module-org-kde-kirigami qml6-module-org-kde-prison \
 qml6-module-org-kde-kirigamiaddons-components qml6-module-org-kde-kirigamiaddons-formcard \
 qml6-module-qtquick-controls qml6-module-qtquick-layouts qml6-module-qtmultimedia

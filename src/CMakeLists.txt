@@ -16,6 +16,7 @@ add_subdirectory(backups)
 add_subdirectory(account)
 add_subdirectory(model)
 add_subdirectory(validators)
+add_subdirectory(qrcode)
 add_subdirectory(app)
 
 configure_file ("${CMAKE_CURRENT_SOURCE_DIR}/version.h.in" "${CMAKE_CURRENT_BINARY_DIR}/version.h")
@@ -68,6 +69,7 @@ target_link_libraries(keysmith
         KF6::ConfigGui
         KF6::I18nQml
         keysmith_lib
+        qrcode_lib
 )
 
 if (ENABLE_DBUS_INTERFACE)

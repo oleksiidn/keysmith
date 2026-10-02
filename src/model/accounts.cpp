@@ -6,6 +6,8 @@
 
 #include "../logging_p.h"
 
+#include <QUrl>
+
 KEYSMITH_LOGGER(logger, ".model.accounts")
 
 namespace model
@@ -69,9 +71,31 @@ QString AccountView::issuer(void) const
     return m_model->issuer();
 }
 
-QString AccountView::secret(void) const
+QString AccountView::otpauthUri(void) const
 {
-    return m_model->secret();
+    const QString secret = m_model->secret();
+    if (secret.isEmpty()) {
+        qCDebug(logger) << "Unable to build otpauth URI: account secret is not available";
+        return QString();
+    }
+
+    const QString type = isHotp() ? QStringLiteral("hotp") : QStringLiteral("totp");
+    const QString encodedName = QString::fromUtf8(QUrl::toPercentEncoding(name()));
+    const QString encodedIssuer = QString::fromUtf8(QUrl::toPercentEncoding(issuer()));
+    const QString label = issuer().isEmpty() ? encodedName : encodedIssuer + QLatin1Char(':') + encodedName;
+
+    QString uri = QStringLiteral("otpauth://%1/%2?secret=%3").arg(type, label, secret);
+    if (!issuer().isEmpty()) {
+        uri += QStringLiteral("&issuer=") + encodedIssuer;
+    }
+    uri += QStringLiteral("&digits=") + QString::number(tokenLength());
+    if (isHotp()) {
+        uri += QStringLiteral("&counter=") + QString::number(counter());
+    } else {
+        uri += QStringLiteral("&algorithm=") + hash();
+        uri += QStringLiteral("&period=") + QString::number(timeStep());
+    }
+    return uri;
 }
 
 quint64 AccountView::counter(void) const

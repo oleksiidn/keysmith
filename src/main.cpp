@@ -27,6 +27,7 @@
 #include "app/vms.h"
 #include "model/accounts.h"
 #include "model/input.h"
+#include "qrcode/qrcodeitem.h"
 #include "validators/countervalidator.h"
 #include "validators/datetimevalidator.h"
 #include "validators/issuervalidator.h"
@@ -184,6 +185,7 @@ Q_DECL_EXPORT int main(int argc, char *argv[])
     qmlRegisterType<model::ImportInput>("Keysmith.Models", 1, 0, "ValidatedImportInput");
     qmlRegisterType<model::ImportInput>("Keysmith.Models", 1, 0, "ValidatedImportInput");
     qmlRegisterType<model::SortedAccountsListModel>("Keysmith.Models", 1, 0, "SortedAccountListModel");
+    qmlRegisterType<qrcode::QrCodeItem>("Keysmith.Components", 1, 0, "QrCode");
     qmlRegisterType<model::AccountNameValidator>("Keysmith.Validators", 1, 0, "AccountNameValidator");
     qmlRegisterType<validators::EpochValidator>("Keysmith.Validators", 1, 0, "TOTPEpochValidator");
     qmlRegisterType<validators::IssuerValidator>("Keysmith.Validators", 1, 0, "AccountIssuerValidator");

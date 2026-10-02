@@ -19,12 +19,12 @@ AccountEntryViewBase {
 
     actions: [
         Kirigami.Action {
-            icon.name: "password-show-on"
-            text: i18nc("Button to reveal the secret of a single account", "Show secret")
+            icon.name: "view-barcode-qr-symbolic"
+            text: i18nc("Button to show the QR code of a single account", "Show QR code")
             enabled: listItem.alive
             onTriggered: {
                 listItem.actionTriggered();
-                listItem.secretDialog.secret = listItem.account.secret();
+                listItem.secretDialog.uri = listItem.account.otpauthUri();
                 listItem.secretDialog.open();
             }
         },

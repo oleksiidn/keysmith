@@ -12,6 +12,7 @@ import org.kde.kirigamiaddons.components as Components
 
 import Keysmith.Application 1.0
 import Keysmith.Models 1.0 as Models
+import Keysmith.Components 1.0 as KeysmithComponents
 
 Kirigami.SwipeListItem {
     /*
@@ -95,21 +96,28 @@ Kirigami.SwipeListItem {
     }
 
     readonly property Components.MessageDialog secretDialog: Components.MessageDialog {
-        property string secret: ""
+        property string uri: ""
 
         dialogType: Components.MessageDialog.Warning
-        title: i18nc("Secret dialog title: %1 is the name of the account", "Secret of account: %1", account.name)
+        title: i18nc("Secret dialog title: %1 is the name of the account", "QR code of account: %1", account.name)
         standardButtons: Controls.Dialog.Close
-        onRejected: {
-            secret = "";
-            secretDialog.close();
+        onClosed: uri = ""
+
+        Controls.Label {
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: qrCode.valid
+                ? i18n("Scan this code with another authenticator app to add this account to it. Anyone who sees this code can generate tokens for your account.")
+                : i18n("Unable to generate a QR code for this account.")
         }
 
-        Controls.TextField {
-            Layout.fillWidth: true
-            readOnly: true
-            font.family: "monospace"
-            text: secretDialog.secret
+        KeysmithComponents.QrCode {
+            id: qrCode
+            visible: valid
+            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredWidth: Kirigami.Units.gridUnit * 15
+            Layout.preferredHeight: Layout.preferredWidth
+            text: secretDialog.uri
         }
     }
 

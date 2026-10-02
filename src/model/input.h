@@ -47,6 +47,7 @@ public:
     AccountInput(QObject *parent = nullptr);
     void createNewAccount(accounts::AccountStorage *storage) const;
     Q_INVOKABLE void reset(void);
+    Q_INVOKABLE bool populateFromTotpUri(const QString &uri);
 
 public:
     TokenType type(void) const;

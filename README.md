@@ -6,6 +6,8 @@
 
 # <img src="keysmith.svg" width="40"/> Keysmith
 
+## Fork works only with TOTP (not HOTP)
+
 [![pipeline status](https://invent.kde.org/bshah/keysmith/badges/master/pipeline.svg)](https://invent.kde.org/bshah/keysmith/commits/master)
 
 Keysmith is an application to generate two-factor authentication (2FA) tokens when logging in to your (online) accounts. Currently it supports both HOTP and TOTP tokens.

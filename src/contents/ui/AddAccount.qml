@@ -120,9 +120,17 @@ FormCard.FormCardPage {
             label: i18nc("@label:textbox", "Secret key:")
             validator: Validators.Base32SecretValidator {
                 id: secretValidator
+                allowOtpauthUri: totpRadio.checked
             }
             inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData | Qt.ImhHiddenText
             onTextChanged: {
+                if (totpRadio.checked && vm.input.populateFromTotpUri(text)) {
+                    accountName.refresh();
+                    totpDetails.refresh();
+                    root.detailsEnabled = true;
+                    text = vm.input.secret;
+                    return;
+                }
                 if (acceptableInput) {
                     vm.input.secret = text;
                 }

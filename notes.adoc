@@ -1,11 +1,5 @@
 = Notes
 
-== HOTPA vs TOTPA
-
-HOTP (RFC 4226) is counter-based. The token changes only when the counter goes up, usually because you asked for the next one.
-
-TOTP (RFC 6238) is time-based. The token changes by itself every N seconds, counted from a start time (the epoch).
-
 == How to compile
 
 === Ubuntu
@@ -40,3 +34,96 @@ wget -O keysmith.zip https://nightly.link/oleksiidn/keysmith/workflows/flatpak.y
 unzip -o keysmith.zip
 flatpak install --user --reinstall ./keysmith-aarch64.flatpak
 ----
+
+== Secret structure
+
+Keysmith able to parse string and add secret base on next structure
+
+A QR code for a 2FA account holds a single `otpauth://` URI, the Key URI Format.
+
+=== Example
+
+The secret below is a well-known dummy value. Never put a real secret in this file.
+
+----
+otpauth://totp/UpCloud%3Aorganization-name%40crew-sandbox?period=30&digits=6&algorithm=SHA1&secret=SECRETDUMMYTESTA&issuer=UpCloud
+\________/\__/ \____________________________________/ \__________________________________________________________________/
+  scheme  type                 label                                               parameters
+----
+
+=== Parts
+
+[cols="1,2,3",options="header"]
+|===
+| Part | Example | Meaning
+
+| Scheme
+| `otpauth://`
+| Fixed prefix.
+
+| Type (auth type)
+| `totp`
+| `totp` for time-based (RFC 6238) or `hotp` for counter-based (RFC 4226). Lower case only.
+
+| Label
+| `UpCloud%3Abusiness-name%40UpCloud-crew-sandbox`
+| `issuer:account name`, percent-encoded. `%3A` is `:` and `%40` is `@`,
+so this decodes to issuer `UpCloud` and account name `business-name@crew-sandbox`.
+The issuer part is optional.
+
+| Parameters
+| `?period=30&digits=6&...`
+| `key=value` pairs separated by `&`, in any order.
+|===
+
+=== Label (secret name)
+
+* Format: `/Issuer:AccountName`. The first `:` (or `%3A`) separates issuer from account name.
+* Without a `:` the whole label is the account name and the issuer comes from the `issuer` parameter.
+* If both exist, the issuer in the label wins (unless it is empty).
+* Both parts are percent-encoded UTF-8. The issuer must not contain `:`.
+* In Keysmith the account name plus issuer must be unique.
+
+=== Parameters
+
+[cols="1,1,1,3",options="header"]
+|===
+| Parameter | Required | Default | Meaning
+
+| `secret`
+| yes
+| –
+| Shared key, Base32 (`A-Z`, `2-7`), usually without `=` padding.
+Keysmith pads it to a multiple of 8 characters itself.
+
+| `issuer`
+| recommended
+| empty
+| Service name, e.g. `UpCloud`. Should match the issuer in the label.
+
+| `algorithm`
+| no
+| `SHA1`
+| HMAC hash: `SHA1`, `SHA256` or `SHA512` (case-insensitive in Keysmith).
+Many apps ignore it and always use SHA1.
+
+| `digits`
+| no
+| `6`
+| Token length. Keysmith accepts 6 to 10.
+
+| `period`
+| TOTP only
+| `30`
+| Seconds each TOTP token stays valid.
+
+
+|===
+
+== Other things
+
+=== HOTPA vs TOTPA
+
+HOTP (RFC 4226) is counter-based. The token changes only when the counter goes up, usually because you asked for the next one.
+
+TOTP (RFC 6238) is time-based. The token changes by itself every N seconds, counted from a start time (the epoch).

@@ -71,6 +71,11 @@ FormCard.FormCard {
             issuerName.insert(issuerName.text.length, "");
         }
     }
+
+    function refresh() {
+        issuerName.text = validatedInput.issuer;
+        accountName.text = validatedInput.name;
+    }
     function forceActiveFocus() {
         accountName.forceActiveFocus()
     }

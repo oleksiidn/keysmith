@@ -72,6 +72,21 @@ void AccountInput::reset(void)
     setDynamicTruncation();
 }
 
+bool AccountInput::populateFromTotpUri(const QString &uri)
+{
+    const auto parts = uri::QrParts::parse(uri.trimmed());
+    if (!parts || parts->type() != uri::QrParts::Type::Totp) {
+        return false;
+    }
+
+    const auto parameters = QrParameters::from(*parts);
+    if (!parameters) {
+        return false;
+    }
+
+    parameters->populate(this);
+    return true;
+}
 void AccountInput::createNewAccount(accounts::AccountStorage *storage) const
 {
     if (!storage) {

@@ -21,6 +21,15 @@ FormCard.FormCard {
     property bool epochAcceptable: epochField.acceptableInput
     property bool acceptable: timeStepAcceptable && algorithmAcceptable && epochAcceptable
 
+    function refresh() {
+        timeStepField.text = "" + validatedInput.timeStep;
+        epochField.text = validatedInput.epoch;
+        tokenLengthField.value = validatedInput.tokenLength;
+        sha1Radio.checked = validatedInput.algorithm === Models.ValidatedAccountInput.Sha1;
+        sha256Radio.checked = validatedInput.algorithm === Models.ValidatedAccountInput.Sha256;
+        sha512Radio.checked = validatedInput.algorithm === Models.ValidatedAccountInput.Sha512;
+    }
+
     FormCard.FormTextFieldDelegate {
         id: timeStepField
 
